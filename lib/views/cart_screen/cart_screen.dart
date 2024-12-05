@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:smartgear_store/consts/consts.dart';
 
 class CartScreen extends StatelessWidget {
-  const CartScreen({Key? key}) : super(key: key);
+  const CartScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

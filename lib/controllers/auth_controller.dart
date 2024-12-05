@@ -4,18 +4,22 @@ import 'package:flutter/material.dart';
 import 'package:smartgear_store/consts/consts.dart';
 
 class AuthController extends GetxController {
+  var isLoading = false.obs;
+
   //text controllers
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
 
-  //Login method
   Future<UserCredential?> loginMethod({context}) async {
     UserCredential? userCredential;
     try {
-      await auth.signInWithEmailAndPassword(
-          email: emailController.text, password: passwordController.text);
+      userCredential = await auth.signInWithEmailAndPassword(
+        email: emailController.text.trim(),
+        password: passwordController.text.trim(),
+      );
+      currentUser = userCredential.user; // Gán thông tin người dùng
     } on FirebaseAuthException catch (e) {
-      VxToast.show(context, msg: e.toString());
+      VxToast.show(context, msg: e.message ?? "Login failed");
     }
     return userCredential;
   }
@@ -40,7 +44,11 @@ class AuthController extends GetxController {
       'name': name,
       'email': email,
       'password': password,
-      'imgUrl': '',
+      'imageUrl': '',
+      'id': currentUser!.uid,
+      'cart_count': "00",
+      'order_count': "00",
+      'wish_count': "00",
     });
   }
 
@@ -48,6 +56,8 @@ class AuthController extends GetxController {
   signoutMethod(context) async {
     try {
       await auth.signOut();
+      currentUser = null;
+      await FirebaseFirestore.instance.clearPersistence();
     } catch (e) {
       VxToast.show(context, msg: e.toString());
     }

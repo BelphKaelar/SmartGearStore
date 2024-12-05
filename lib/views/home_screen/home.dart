@@ -7,7 +7,7 @@ import 'package:smartgear_store/views/home_screen/home_screen.dart';
 import 'package:smartgear_store/views/profile_screen/profile_screen.dart';
 
 class Home extends StatelessWidget {
-  const Home({Key? key}) : super(key: key);
+  const Home({super.key});
 
   @override
   Widget build(BuildContext context) {

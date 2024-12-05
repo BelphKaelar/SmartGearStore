@@ -32,24 +32,24 @@ const searchAnything = "Search ... ",
     brand = "Brand",
     topCategories = "Top Categories",
     featuredCategories = "Featured Categories",
-    womenDress = "Women Dress",
-    girlWatches = "Girls Watches",
+    womenDress = "Laptop",
+    girlWatches = "Gaming Laptop",
     mobilePhone = "Mobile Phone",
-    boysGlasses = "Boys Glasses",
-    tShirts = "TShirts",
-    girlDress = "Girls Dresses",
+    boysGlasses = "Monitor",
+    tShirts = "Console",
+    girlDress = "Mouse & Keyboard",
     featuredProduct = "Featured Products";
 
 //category strings
 const womenClothing = "Women Clothing",
-    menClothingFashion = "Men Clothing & Fashion",
-    compAccess = "Computer & Accessories",
-    automobile = "Automobile",
-    kidToys = "Kids' Toys",
-    sports = "Sports",
-    jewelery = "Jewelery",
-    cellphone = "Cellphone",
-    furniture = "Furniture";
+    menClothingFashion = "Gaming Laptop",
+    compAccess = "Headphones",
+    automobile = "Monitor",
+    kidToys = "Speakers",
+    sports = "Mobile Phone",
+    jewelery = "Console",
+    cellphone = "Mouse & Keyboard",
+    furniture = "Accessories";
 
 //item details strings
 const video = "Video",
@@ -60,4 +60,8 @@ const video = "Video",
     productyoumaylike = "Products you may also like";
 
 //profile strings
-const wishlist = "My Wishlist", orders = "My Orders", messages = "Messages";
+const wishlist = "My Wishlist",
+    orders = "My Orders",
+    messages = "Messages",
+    newPass = "New Password",
+    oldPass = "Old Password";

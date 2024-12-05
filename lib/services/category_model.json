@@ -1,0 +1,92 @@
+{
+    "categories": [
+        {
+            "name": "Laptop",
+            "subcategory": [
+                "Apple",
+                "Dell",
+                "Microsoft",
+                "HP",
+                "Lenovo"
+            ]
+        },
+        {
+            "name": "Gaming Laptop",
+            "subcategory": [
+                "ASUS",
+                "Acer",
+                "MSI",
+                "Alienware",
+                "Lenovo"
+            ]
+        },
+        {
+            "name": "Headphones",
+            "subcategory": [
+                "Logitech",
+                "HyperX",
+                "Corsair",
+                "Razer",
+                "Steelseries"
+            ]
+        },
+        {
+            "name": "Monitor",
+            "subcategory": [
+                "LG",
+                "Samsung",
+                "ASUS",
+                "HP",
+                "ViewSonic"
+            ]
+        },
+        {
+            "name": "Speakers",
+            "subcategory": [
+                "Bose",
+                "JBL",
+                "Sony",
+                "Yamaha",
+                "Sennheiser"
+            ]
+        },
+        {
+            "name": "Mobile Phone",
+            "subcategory": [
+                "Apple",
+                "Samsung",
+                "vivo",
+                "Xiaomi",
+                "OPPO"
+            ]
+        },
+        {
+            "name": "Console",
+            "subcategory": [
+                "PlayStation",
+                "Xbox",
+                "Nintendo"
+            ]
+        },
+        {
+            "name": "Mouse & Keyboard",
+            "subcategory": [
+                "Steelseries",
+                "Razer",
+                "Logitech",
+                "Corsair",
+                "AKKO"
+            ]
+        },
+        {
+            "name": "Accessories",
+            "subcategory": [
+                "Chargers",
+                "Cables",
+                "Cases",
+                "Controller",
+                "Conversion Hub"
+            ]
+        }
+    ]
+}

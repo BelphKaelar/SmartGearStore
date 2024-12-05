@@ -5,7 +5,7 @@ import 'package:smartgear_store/views/home_screen/components/featured_button.dar
 import 'package:smartgear_store/common_widgets/home_buttons.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

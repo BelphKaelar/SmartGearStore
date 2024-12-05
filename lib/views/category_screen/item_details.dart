@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:smartgear_store/consts/consts.dart';
 import 'package:smartgear_store/consts/lists.dart';
 import 'package:smartgear_store/common_widgets/our_button.dart';
+import 'package:smartgear_store/controllers/product_controller.dart';
 
 class ItemDetails extends StatelessWidget {
   final String? title;
-  const ItemDetails({Key? key, required this.title}) : super(key: key);
+  final dynamic data;
+  const ItemDetails({super.key, required this.title, this.data});
 
   @override
   Widget build(BuildContext context) {
+    var controller = Get.find<ProductController>();
     return Scaffold(
       backgroundColor: lightGrey,
       appBar: AppBar(
@@ -35,15 +38,16 @@ class ItemDetails extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  //Swiper section
+                  //Swiper section <=== This section has error potential, be aware!
                   VxSwiper.builder(
                       autoPlay: true,
                       height: 350,
                       aspectRatio: 16 / 9,
-                      itemCount: 3,
+                      itemCount: data['p_imgs'].length,
+                      // viewportFraction: 0.8,
                       itemBuilder: (context, index) {
-                        return Image.asset(
-                          imgFc5,
+                        return Image.network(
+                          data['p_imgs'][index],
                           width: double.infinity,
                           fit: BoxFit.cover,
                         );
@@ -60,16 +64,19 @@ class ItemDetails extends StatelessWidget {
                   //rating
                   10.heightBox,
                   VxRating(
+                    isSelectable: false,
+                    value: double.parse(data['p_rating']),
                     onRatingUpdate: (value) {},
                     normalColor: textfieldGrey,
                     selectionColor: golden,
                     count: 5,
                     size: 25,
-                    stepInt: true,
+                    maxRating: 5,
                   ),
 
                   10.heightBox,
-                  "\$30.000"
+                  "${data['p_price']}"
+                      .numCurrency //same shit
                       .text
                       .color(redColor)
                       .fontFamily(bold)
@@ -86,7 +93,7 @@ class ItemDetails extends StatelessWidget {
                         children: [
                           "Seller".text.white.fontFamily(semibold).make(),
                           5.heightBox,
-                          "In house brands"
+                          "${data['p_seller']}"
                               .text
                               .fontFamily(semibold)
                               .color(darkFontGrey)
@@ -111,74 +118,104 @@ class ItemDetails extends StatelessWidget {
 
                   //Color selection section
                   20.heightBox,
-                  Column(
-                    children: [
-                      Row(
-                        children: [
-                          SizedBox(
-                            width: 100,
-                            child: "Color".text.color(textfieldGrey).make(),
-                          ),
-                          Row(
-                            children: List.generate(
-                              3,
-                              (index) => VxBox()
-                                  .size(40, 40)
-                                  .roundedFull
-                                  .color(Vx.randomPrimaryColor)
-                                  .margin(
-                                      const EdgeInsets.symmetric(horizontal: 4))
-                                  .make(),
+                  Obx(
+                    () => Column(
+                      children: [
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: 100,
+                              child: "Color".text.color(textfieldGrey).make(),
                             ),
-                          ),
-                        ],
-                      ).box.padding(const EdgeInsets.all(8)).make(),
+                            Row(
+                              children: List.generate(
+                                data['p_colors'].length,
+                                (index) => Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      VxBox()
+                                          .size(40, 40)
+                                          .roundedFull
+                                          .color(Color(data['p_colors'][index])
+                                              .withOpacity(1.0))
+                                          .margin(const EdgeInsets.symmetric(
+                                              horizontal: 4))
+                                          .make()
+                                          .onTap(() {
+                                        controller.changeColorIndex(index);
+                                      }),
+                                      Visibility(
+                                          visible: index ==
+                                              controller.colorIndex.value,
+                                          child: const Icon(Icons.done,
+                                              color: Colors.white))
+                                    ]),
+                              ),
+                            ),
+                          ],
+                        ).box.padding(const EdgeInsets.all(8)).make(),
 
-                      //Quantity selection
-                      Row(
-                        children: [
-                          SizedBox(
-                            width: 100,
-                            child: "Color".text.color(textfieldGrey).make(),
-                          ),
-                          Row(
-                            children: [
-                              IconButton(
-                                  onPressed: () {},
-                                  icon: const Icon(Icons.remove)),
-                              "0"
-                                  .text
-                                  .size(16)
-                                  .color(darkFontGrey)
-                                  .fontFamily(bold)
-                                  .make(),
-                              IconButton(
-                                  onPressed: () {},
-                                  icon: const Icon(Icons.add)),
-                              10.widthBox,
-                              "(0 available)".text.color(textfieldGrey).make(),
-                            ],
-                          ),
-                        ],
-                      ).box.padding(const EdgeInsets.all(8)).make(),
+                        //Quantity selection
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: 100,
+                              child:
+                                  "Quantity".text.color(textfieldGrey).make(),
+                            ),
+                            Obx(
+                              () => Row(
+                                children: [
+                                  IconButton(
+                                      onPressed: () {
+                                        controller.decreaseQuantity();
+                                        controller.calculatePrice(
+                                            double.parse(data['p_price']));
+                                      },
+                                      icon: const Icon(Icons.remove)),
+                                  controller.quantity.value.text
+                                      .size(16)
+                                      .color(darkFontGrey)
+                                      .fontFamily(bold)
+                                      .make(),
+                                  IconButton(
+                                      onPressed: () {
+                                        controller.increaseQuantity(
+                                            int.parse(data['p_quantity']));
+                                        controller.calculatePrice(
+                                            double.parse(data['p_price']));
+                                      },
+                                      icon: const Icon(Icons.add)),
+                                  10.widthBox,
+                                  "(${data['p_quantity']} available)"
+                                      .text
+                                      .color(textfieldGrey)
+                                      .make(),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ).box.padding(const EdgeInsets.all(8)).make(),
 
-                      //Total row
-                      Row(
-                        children: [
-                          SizedBox(
-                            width: 100,
-                            child: "Total: ".text.color(textfieldGrey).make(),
-                          ),
-                          "\$0.00"
-                              .text
-                              .color(redColor)
-                              .size(16)
-                              .fontFamily(bold)
-                              .make(),
-                        ],
-                      ).box.padding(const EdgeInsets.all(8)).make(),
-                    ],
-                  ).box.white.shadowSm.make(),
+                        //Total row
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: 100,
+                              child: "Total: ".text.color(textfieldGrey).make(),
+                            ),
+                            "${controller.totalPrice.value}"
+                                .numCurrency
+                                .text
+                                .color(redColor)
+                                .size(16)
+                                .fontFamily(bold)
+                                .make(),
+                          ],
+                        ).box.padding(const EdgeInsets.all(8)).make(),
+                      ],
+                    ).box.white.shadowSm.make(),
+                  ),
 
                   //Description section
                   10.heightBox,
@@ -188,10 +225,7 @@ class ItemDetails extends StatelessWidget {
                       .fontFamily(semibold)
                       .make(),
                   10.heightBox,
-                  "This is a dummy item and dummy description here... Dolore in incididunt Lorem exercitation fugiat do culpa. Excepteur consectetur proident consequat proident pariatur labore. Dolore ex labore consectetur laboris id velit non quis aute minim ex."
-                      .text
-                      .color(darkFontGrey)
-                      .make(),
+                  "${data['p_desc']}".text.color(darkFontGrey).make(),
 
                   //Button section
                   10.heightBox,
