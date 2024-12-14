@@ -17,19 +17,17 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     //Still using getX here so 'MaterialApp' change to 'GetMaterialApp'
     return GetMaterialApp(
-      debugShowCheckedModeBanner: false, // remove goddamn debug banner
-      title: appname,
-      theme: ThemeData(
-        scaffoldBackgroundColor: Colors.transparent,
-        appBarTheme: const AppBarTheme(
-            //To set app bar icons color
-            iconTheme: IconThemeData(color: darkFontGrey),
-            //Set elevation to 0
-            elevation: 0,
-            backgroundColor: Colors.transparent),
-        fontFamily: regular,
-      ),
-      home: const SplashScreen(),
-    );
+        debugShowCheckedModeBanner: false, // remove goddamn debug banner
+        title: appname,
+        theme: ThemeData(
+            scaffoldBackgroundColor: Colors.transparent,
+            appBarTheme: const AppBarTheme(
+                //To set app bar icons color
+                iconTheme: IconThemeData(color: darkFontGrey),
+                //Set elevation to 0
+                elevation: 0,
+                backgroundColor: Colors.transparent),
+            fontFamily: regular),
+        home: const SplashScreen());
   }
 }

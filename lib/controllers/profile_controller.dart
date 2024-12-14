@@ -52,7 +52,7 @@ class ProfileController extends GetxController {
     await currentUser!.reauthenticateWithCredential(cred).then((value) {
       currentUser!.updatePassword(newpassword);
     }).catchError((onError) {
-      print(onError.toString());
+      // print(onError.toString());
     });
   }
 }

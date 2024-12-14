@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smartgear_store/common_widgets/exit_dialog.dart';
 import 'package:smartgear_store/consts/consts.dart';
 import 'package:smartgear_store/controllers/home_controller.dart';
 import 'package:smartgear_store/views/cart_screen/cart_screen.dart';
@@ -47,24 +48,35 @@ class Home extends StatelessWidget {
       const ProfileScreen(),
     ];
 
-    return Scaffold(
-      body: Column(
-        children: [
-          Obx(() => Expanded(
-              child: navBody.elementAt(controller.currentNavIndex.value))),
-        ],
-      ),
-      bottomNavigationBar: Obx(
-        () => BottomNavigationBar(
-          currentIndex: controller.currentNavIndex.value,
-          items: navbarItem,
-          type: BottomNavigationBarType.fixed,
-          backgroundColor: whiteColor,
-          selectedItemColor: redColor,
-          selectedLabelStyle: const TextStyle(fontFamily: semibold),
-          onTap: (value) {
-            controller.currentNavIndex.value = value;
-          },
+    // ignore: deprecated_member_use
+    return WillPopScope(
+      // SEND HELP! IDK HOW TO FIX THIS DECRECATED THING!
+      onWillPop: () async {
+        showDialog(
+            barrierDismissible: false,
+            context: context,
+            builder: (context) => exitDialog(context));
+        return false;
+      },
+      child: Scaffold(
+        body: Column(
+          children: [
+            Obx(() => Expanded(
+                child: navBody.elementAt(controller.currentNavIndex.value))),
+          ],
+        ),
+        bottomNavigationBar: Obx(
+          () => BottomNavigationBar(
+            currentIndex: controller.currentNavIndex.value,
+            items: navbarItem,
+            type: BottomNavigationBarType.fixed,
+            backgroundColor: whiteColor,
+            selectedItemColor: redColor,
+            selectedLabelStyle: const TextStyle(fontFamily: semibold),
+            onTap: (value) {
+              controller.currentNavIndex.value = value;
+            },
+          ),
         ),
       ),
     );

@@ -94,6 +94,7 @@ class ProfileScreen extends StatelessWidget {
                               )),
 
                               //Logout button - Idk bout dis but there seem to be a problem back and fort Logout and Home/Login
+                              //Patched but at what cost T_T
                               OutlinedButton(
                                 style: OutlinedButton.styleFrom(
                                     side: const BorderSide(
@@ -115,19 +116,48 @@ class ProfileScreen extends StatelessWidget {
                         ),
 
                         20.heightBox,
+                        // FutureBuilder(
+                        //     future: FirestoreServices.getCounts(),
+                        //     builder:
+                        //         (BuildContext context, AsyncSnapshot snapshot) {
+                        //       if (snapshot.hasData) {
+                        //         return Center(child: loadingIndicator());
+                        //       } else {
+                        //         var countData = snapshot.data;
+                        //         return Row(
+                        //           mainAxisAlignment:
+                        //               MainAxisAlignment.spaceEvenly,
+                        //           children: [
+                        //             detailsCard(
+                        //                 count: countData[0].toString(),
+                        //                 title: "In your cart",
+                        //                 width: context.screenWidth / 3.4),
+                        //             detailsCard(
+                        //                 count: countData[0].toString(),
+                        //                 title: "In your wishlist",
+                        //                 width: context.screenWidth / 3.4),
+                        //             detailsCard(
+                        //                 count: countData[0].toString(),
+                        //                 title: "Orders",
+                        //                 width: context.screenWidth / 3.4),
+                        //           ],
+                        //         );
+                        //       }
+                        //     }),
+
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             detailsCard(
-                                count: data['cart_count'],
+                                count: data['cart_count'].toString(),
                                 title: "In your cart",
                                 width: context.screenWidth / 3.4),
                             detailsCard(
-                                count: data['wish_count'],
+                                count: data['wish_count'].toString(),
                                 title: "In your wishlist",
                                 width: context.screenWidth / 3.4),
                             detailsCard(
-                                count: data['order_count'],
+                                count: data['order_count'].toString(),
                                 title: "Orders",
                                 width: context.screenWidth / 3.4),
                           ],

@@ -65,3 +65,6 @@ const wishlist = "My Wishlist",
     messages = "Messages",
     newPass = "New Password",
     oldPass = "Old Password";
+
+//payment methods strings
+const paypal = "Paypal", momo = "MoMo", cod = "Cash On Delivery";
