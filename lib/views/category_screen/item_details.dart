@@ -11,7 +11,7 @@ class ItemDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.find<ProductController>();
+    var controller = Get.put(ProductController());
     // ignore: deprecated_member_use
     return WillPopScope(
       // SEND HELP HERE TOO!
@@ -260,7 +260,7 @@ class ItemDetails extends StatelessWidget {
                       children: List.generate(
                           itemDetailsButtonList.length,
                           (index) => ListTile(
-                                title: "${itemDetailsButtonList[index]}"
+                                title: itemDetailsButtonList[index]
                                     .text
                                     .fontFamily(semibold)
                                     .make(),

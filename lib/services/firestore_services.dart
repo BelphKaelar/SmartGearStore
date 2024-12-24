@@ -30,6 +30,20 @@ class FirestoreServices {
     return firestore.collection(cartCollection).doc(docId).delete();
   }
 
+  static getAllOrders() {
+    return firestore
+        .collection(orderCollection)
+        .where('order_by', isEqualTo: currentUser!.uid)
+        .snapshots();
+  }
+
+  static getWishList() {
+    return firestore
+        .collection(productCollection)
+        .where('p_wishlist', arrayContains: currentUser!.uid)
+        .snapshots();
+  }
+
   static getCounts() async {
     var res = await Future.wait([
       firestore
@@ -41,23 +55,34 @@ class FirestoreServices {
       }),
       firestore
           .collection(productCollection)
-          .where('p_wishlist', isEqualTo: currentUser!.uid)
+          .where('p_wishlist', arrayContains: currentUser!.uid)
           .get()
           .then((value) {
         return value.docs.length;
       }),
-      // firestore
-      //     .collection(orderCollection)
-      //     .where('order_by', isEqualTo: currentUser!.uid)
-      //     .get()
-      //     .then((value) {
-      //   return value.docs.length;
-      // })
+      firestore
+          .collection(orderCollection)
+          .where('order_by', isEqualTo: currentUser!.uid)
+          .get()
+          .then((value) {
+        return value.docs.length;
+      })
     ]);
     return res;
   }
 
-  static getAllProducts() {
+  static allProducts() {
     return firestore.collection(productCollection).snapshots();
+  }
+
+  static getFeaturedProducts() {
+    return firestore
+        .collection(productCollection)
+        .where('is_featured', isEqualTo: true)
+        .get();
+  }
+
+  static searachProduct(title) {
+    return firestore.collection(productCollection).get();
   }
 }
