@@ -27,6 +27,7 @@ class WishlistScreen extends StatelessWidget {
             } else if (snapshot.data!.docs.isEmpty) {
               return "No order yet!".text.color(darkFontGrey).makeCentered();
             } else {
+              var data = snapshot.data!.docs;
               return Container();
             }
           }),

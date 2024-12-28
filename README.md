@@ -1,1 +1,1 @@
-Only works with Flutter below v3.24.5 
+Only works with Flutter v3.24.5 or lower  

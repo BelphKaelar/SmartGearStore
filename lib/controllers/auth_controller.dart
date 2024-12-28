@@ -28,8 +28,9 @@ class AuthController extends GetxController {
   Future<UserCredential?> signupMethod({email, password, context}) async {
     UserCredential? userCredential;
     try {
-      await auth.createUserWithEmailAndPassword(
+      userCredential = await auth.createUserWithEmailAndPassword(
           email: email, password: password);
+      currentUser = auth.currentUser; // Gán currentUser
     } on FirebaseAuthException catch (e) {
       VxToast.show(context, msg: e.toString());
     }

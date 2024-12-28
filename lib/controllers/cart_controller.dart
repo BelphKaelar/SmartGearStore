@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:smartgear_store/consts/consts.dart';
@@ -19,6 +21,17 @@ class CartController extends GetxController {
 
   var placingOrder = false.obs;
 
+  // Random numbers go 'Whoosh Whoosh'
+  String generateOrderCode(String referenceCode) {
+    final random = Random();
+    final length = referenceCode.length;
+    final buffer = StringBuffer();
+    for (var i = 0; i < length; i++) {
+      buffer.write(random.nextInt(10));
+    }
+    return buffer.toString();
+  }
+
   calculate(data) {
     totalP.value = 0.0;
     for (var i = 0; i < data.length; i++) {
@@ -36,7 +49,12 @@ class CartController extends GetxController {
   placeMyOrder({required orderPaymentMethod, required totalAmount}) async {
     placingOrder(true);
     await getProductDetails();
+
+    final orderCodeReference = "233981237"; // Drop your reference nuke code
+    final generatedCode = generateOrderCode(orderCodeReference);
+
     await firestore.collection(orderCollection).doc().set({
+      'order_code': generatedCode,
       'order_by': currentUser!.uid,
       'order_by_name': Get.find<HomeController>().username,
       'order_by_email': currentUser!.email,
@@ -46,7 +64,7 @@ class CartController extends GetxController {
       'order_by_province': provinceController.text,
       'shipping_method': "Home Delivery",
       'payment_method': orderPaymentMethod,
-      'order_date': DateTime.now(),
+      'order_date': FieldValue.serverTimestamp(),
       'order_placed': true,
       'order_confirmed': false,
       'order_delivered': false,

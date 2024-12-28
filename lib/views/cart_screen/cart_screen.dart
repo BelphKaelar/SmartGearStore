@@ -19,12 +19,12 @@ class CartScreen extends StatelessWidget {
           automaticallyImplyLeading: false,
           title: "Shopping Cart"
               .text
-              .color(darkFontGrey)
+              .color(whiteColor)
               .fontFamily(semibold)
               .make(),
         ),
         body: Center(
-          child: "User not logged in".text.color(darkFontGrey).make(),
+          child: "User not logged in".text.color(whiteColor).make(),
         ),
       );
     }

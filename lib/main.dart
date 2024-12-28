@@ -1,7 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:smartgear_store/consts/consts.dart';
-import 'package:smartgear_store/views/auth_screen/login_screen.dart';
 import 'package:smartgear_store/views/splash_screen/splash_screen.dart';
 
 void main() async {
@@ -28,10 +27,6 @@ class MyApp extends StatelessWidget {
                 backgroundColor: Colors.transparent),
             fontFamily: regular),
         home: const SplashScreen());
-    // home:
-    //     const LoginScreen()); //Use this to return if you logged in with auth not user
-    // Validate loggin info before if needed
-    //     home: auth.currentUser == null ? const LoginScreen() : const SplashScreen(),
-    // );
+    // home: const LoginScreen()); //Use this to return if you logged in with auth not user
   }
 }
