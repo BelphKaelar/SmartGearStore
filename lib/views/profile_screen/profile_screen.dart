@@ -7,6 +7,7 @@ import 'package:smartgear_store/controllers/auth_controller.dart';
 import 'package:smartgear_store/controllers/profile_controller.dart';
 import 'package:smartgear_store/services/firestore_services.dart';
 import 'package:smartgear_store/views/auth_screen/login_screen.dart';
+import 'package:smartgear_store/views/home_screen/home.dart';
 import 'package:smartgear_store/views/order_screen/order_screen.dart';
 import 'package:smartgear_store/views/profile_screen/components/details_card.dart';
 import 'package:smartgear_store/common_widgets/bg_widget.dart';
@@ -18,16 +19,50 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Force it to return back to LoginScreen
-    // because idk what cause it return to HomeScreen after Logout once
-    if (auth.currentUser == null) {
-      return const LoginScreen(); //  H E L P !
-    }
     var controller = Get.put(ProfileController());
+
+    if (auth.currentUser == null) {
+      // Khi chưa đăng nhập
+      return bgWidget(
+        child: Scaffold(
+          appBar: AppBar(
+            title: "Profile".text.fontFamily(semibold).white.make(),
+          ),
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.account_circle,
+                  size: 100,
+                  color: whiteColor,
+                ),
+                20.heightBox,
+                "Please login to access your profile"
+                    .text
+                    .fontFamily(semibold)
+                    .white
+                    .make(),
+                20.heightBox,
+                ElevatedButton(
+                  onPressed: () {
+                    Get.to(() => const LoginScreen());
+                  },
+                  style: ElevatedButton.styleFrom(backgroundColor: redColor),
+                  child: "Login".text.fontFamily(semibold).white.make(),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
+    // Khi đã đăng nhập
     return bgWidget(
       child: Scaffold(
         body: StreamBuilder(
-          stream: FirestoreServices.getUser(currentUser!.uid),
+          stream: FirestoreServices.getUser(auth.currentUser!.uid),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshots) {
             if (!snapshots.hasData) {
@@ -46,21 +81,21 @@ class ProfileScreen extends StatelessWidget {
               return SafeArea(
                 child: Column(
                   children: [
-                    // Edit profile button
+                    // Nút chỉnh sửa hồ sơ
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: const Align(
+                      child: Align(
                         alignment: Alignment.topRight,
                         child: Icon(
                           Icons.edit,
                           color: whiteColor,
-                        ),
-                      ).onTap(() {
-                        controller.namecontroller.text = data['name'] ?? '';
-                        Get.to(() => EditprofileScreen(data: data));
-                      }),
+                        ).onTap(() {
+                          controller.namecontroller.text = data['name'] ?? '';
+                          Get.to(() => EditprofileScreen(data: data));
+                        }),
+                      ),
                     ),
-                    //Users details section
+                    // Thông tin người dùng
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Row(
@@ -78,29 +113,28 @@ class ProfileScreen extends StatelessWidget {
                                 ).box.roundedFull.clip(Clip.antiAlias).make(),
                           10.widthBox,
                           Expanded(
-                              child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              "${data['name']}"
-                                  .text
-                                  .fontFamily(semibold)
-                                  .white
-                                  .make(),
-                              "${data['email']}".text.white.make(),
-                            ],
-                          )),
-
-                          //Logout button - Idk bout dis but there seem to be a problem back and fort Logout and Home/Login
-                          //Patched but at what cost T_T
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                "${data['name']}"
+                                    .text
+                                    .fontFamily(semibold)
+                                    .white
+                                    .make(),
+                                "${data['email']}".text.white.make(),
+                              ],
+                            ),
+                          ),
+                          // Nút đăng xuất
                           OutlinedButton(
                             style: OutlinedButton.styleFrom(
-                                side: const BorderSide(
-                              color: whiteColor,
-                            )),
+                              side: const BorderSide(color: whiteColor),
+                            ),
                             onPressed: () async {
                               await Get.put(AuthController())
                                   .signoutMethod(context);
-                              Get.offAll(() => const LoginScreen());
+                              // Chuyển về Home thay vì Login
+                              Get.offAll(() => const Home());
                             },
                             child:
                                 "Logout".text.fontFamily(semibold).white.make(),
@@ -108,67 +142,65 @@ class ProfileScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-
                     20.heightBox,
                     FutureBuilder(
-                        future: FirestoreServices.getCounts(),
-                        builder:
-                            (BuildContext context, AsyncSnapshot snapshot) {
-                          if (!snapshot.hasData) {
-                            return Center(child: loadingIndicator());
-                          } else {
-                            var countData = snapshot.data;
-                            return Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                detailsCard(
-                                    count: countData[0].toString(),
-                                    title: "In your cart",
-                                    width: context.screenWidth / 3.4),
-                                detailsCard(
-                                    count: countData[1].toString(),
-                                    title: "In your wishlist",
-                                    width: context.screenWidth / 3.4),
-                                detailsCard(
-                                    count: countData[2].toString(),
-                                    title: "Orders",
-                                    width: context.screenWidth / 3.4),
-                              ],
-                            );
-                          }
-                        }),
-                    //Buttons section
+                      future: FirestoreServices.getCounts(),
+                      builder: (BuildContext context, AsyncSnapshot snapshot) {
+                        if (!snapshot.hasData) {
+                          return Center(child: loadingIndicator());
+                        } else {
+                          var countData = snapshot.data;
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              detailsCard(
+                                  count: countData[0].toString(),
+                                  title: "In your cart",
+                                  width: context.screenWidth / 3.4),
+                              detailsCard(
+                                  count: countData[1].toString(),
+                                  title: "In your wishlist",
+                                  width: context.screenWidth / 3.4),
+                              detailsCard(
+                                  count: countData[2].toString(),
+                                  title: "Orders",
+                                  width: context.screenWidth / 3.4),
+                            ],
+                          );
+                        }
+                      },
+                    ),
+                    // Danh sách tính năng
                     ListView.separated(
-                            shrinkWrap: true,
-                            itemBuilder: (BuildContext context, int index) {
-                              return ListTile(
-                                onTap: () {
-                                  switch (index) {
-                                    case 0:
-                                      Get.to(OrderScreen());
-                                      break;
-                                    case 1:
-                                      Get.to(WishlistScreen());
-                                      break;
-                                  }
-                                },
-                                leading: Image.asset(
-                                  profileButtonIcon[index],
-                                  width: 22,
-                                ),
-                                title: profileButtonList[index]
-                                    .text
-                                    .fontFamily(semibold)
-                                    .color(darkFontGrey)
-                                    .make(),
-                              );
-                            },
-                            separatorBuilder: (context, index) {
-                              return const Divider(
-                                color: lightGrey,
-                              );
-                            },
-                            itemCount: profileButtonList.length)
+                      shrinkWrap: true,
+                      itemBuilder: (BuildContext context, int index) {
+                        return ListTile(
+                          onTap: () {
+                            switch (index) {
+                              case 0:
+                                Get.to(() => const OrderScreen());
+                                break;
+                              case 1:
+                                Get.to(() => const WishlistScreen());
+                                break;
+                            }
+                          },
+                          leading: Image.asset(
+                            profileButtonIcon[index],
+                            width: 22,
+                          ),
+                          title: profileButtonList[index]
+                              .text
+                              .fontFamily(semibold)
+                              .color(darkFontGrey)
+                              .make(),
+                        );
+                      },
+                      separatorBuilder: (context, index) {
+                        return const Divider(color: lightGrey);
+                      },
+                      itemCount: profileButtonList.length,
+                    )
                         .box
                         .white
                         .rounded

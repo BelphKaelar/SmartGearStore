@@ -15,16 +15,17 @@ class CartScreen extends StatelessWidget {
     var controller = Get.put(CartController());
     if (currentUser == null) {
       return Scaffold(
+        backgroundColor: whiteColor,
         appBar: AppBar(
           automaticallyImplyLeading: false,
           title: "Shopping Cart"
               .text
-              .color(whiteColor)
+              .color(darkFontGrey)
               .fontFamily(semibold)
               .make(),
         ),
         body: Center(
-          child: "User not logged in".text.color(whiteColor).make(),
+          child: "USER NOT LOGGED IN!".text.color(darkFontGrey).make(),
         ),
       );
     }

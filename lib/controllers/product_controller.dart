@@ -75,6 +75,11 @@ class ProductController extends GetxController {
   }
 
   checkIfFav(data) async {
+    if (currentUser == null) {
+      // Nếu chưa đăng nhập, mặc định isFav là false
+      isFav(false);
+      return;
+    }
     if (data['p_wishlist'].contains(currentUser!.uid)) {
       isFav(true);
     } else {

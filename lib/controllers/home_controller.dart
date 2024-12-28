@@ -2,17 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:smartgear_store/consts/consts.dart';
 
 class HomeController extends GetxController {
-  @override
-  void onInit() {
-    getUsername();
-    super.onInit();
-  }
-
   var searchController = TextEditingController();
   var currentNavIndex = 0.obs;
   var username = '';
+  var isLoggedIn = false.obs;
+
+  @override
+  void onInit() {
+    // Check log in state
+    if (auth.currentUser != null) {
+      isLoggedIn(true);
+      getUsername();
+    }
+    super.onInit();
+  }
+
   getUsername() async {
-    if (auth.currentUser == null) return;
     var n = await firestore
         .collection(userCollection)
         .where('id', isEqualTo: auth.currentUser!.uid)

@@ -122,7 +122,7 @@ class OrderDetails extends StatelessWidget {
                                 title1: data['orders'][index]['title'],
                                 title2: data['orders'][index]['tprice'],
                                 d1: "${data['orders'][index]['qty']}x",
-                                d2: "Not Refundable"),
+                                d2: "Refundable"),
                             // Padding(
                             //   padding: EdgeInsets.symmetric(horizontal: 16),
                             //   child: Container(

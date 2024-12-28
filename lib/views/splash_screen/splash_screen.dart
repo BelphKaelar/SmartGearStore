@@ -1,9 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:smartgear_store/consts/consts.dart';
-import 'package:smartgear_store/views/auth_screen/login_screen.dart';
-import 'package:smartgear_store/common_widgets/applogo_widget.dart';
 import 'package:smartgear_store/views/home_screen/home.dart';
+import 'package:smartgear_store/common_widgets/applogo_widget.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -16,14 +14,7 @@ class _SplashScreenState extends State<SplashScreen> {
   //Method to change screen
   changeScreen() {
     Future.delayed(const Duration(seconds: 3), () {
-      //getX in play
-      auth.authStateChanges().listen((User? user) {
-        if (user == null && mounted) {
-          Get.to(() => const LoginScreen());
-        } else {
-          Get.to(() => const Home());
-        }
-      });
+      Get.offAll(() => const Home());
     });
   }
 
@@ -47,12 +38,9 @@ class _SplashScreenState extends State<SplashScreen> {
             applogoWidget(),
             10.heightBox,
             appname.text.fontFamily(bold).size(27).white.make(),
-            // 5.heightBox,
-            // appversion.text.white.make(),
             const Spacer(),
             studentID.text.white.fontFamily(semibold).make(),
             30.heightBox,
-            //This should be enough
           ],
         ),
       ),
