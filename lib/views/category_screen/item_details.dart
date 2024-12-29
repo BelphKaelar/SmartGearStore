@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:smartgear_store/consts/consts.dart';
-import 'package:smartgear_store/consts/lists.dart';
 import 'package:smartgear_store/common_widgets/our_button.dart';
 import 'package:smartgear_store/controllers/product_controller.dart';
 
@@ -15,6 +14,7 @@ class ItemDetails extends StatelessWidget {
     var controller = Get.put(ProductController());
     bool isLoggedIn = currentUser != null; // Kiểm tra đăng nhập
 
+    // ignore: deprecated_member_use
     return WillPopScope(
       onWillPop: () async {
         controller.resetValue();

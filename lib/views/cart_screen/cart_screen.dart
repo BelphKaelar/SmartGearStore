@@ -32,15 +32,19 @@ class CartScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: whiteColor,
-      bottomNavigationBar: SizedBox(
-        height: 60,
-        child: ourButton(
-          color: redColor,
-          onPress: () {
-            Get.to(() => const ShippingDetails());
-          },
-          textColor: whiteColor,
-          title: "Check out",
+      bottomNavigationBar: Obx(
+        () => SizedBox(
+          height: 60,
+          child: controller.totalP.value > 0
+              ? ourButton(
+                  color: redColor,
+                  onPress: () {
+                    Get.to(() => const ShippingDetails());
+                  },
+                  textColor: whiteColor,
+                  title: "Check out",
+                )
+              : Container(), // Mask if there is not a user
         ),
       ),
       appBar: AppBar(
@@ -59,12 +63,20 @@ class CartScreen extends StatelessWidget {
               child: loadingIndicator(),
             );
           } else if (snapshot.data == null || snapshot.data!.docs.isEmpty) {
+            // Return totalP back to 0 make sure it not break the widget
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              controller.totalP.value = 0.0;
+            });
             return Center(
               child: "Cart is Empty".text.color(darkFontGrey).make(),
             );
           } else {
             var data = snapshot.data!.docs;
-            controller.calculate(data);
+            // Tính tổng giá trị sản phẩm
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              controller.calculate(data);
+            });
+
             controller.productSnapshot = data;
             return Padding(
               padding: const EdgeInsets.all(8.0),
