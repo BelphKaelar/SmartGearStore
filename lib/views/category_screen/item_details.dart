@@ -145,29 +145,33 @@ class ItemDetails extends StatelessWidget {
                           .color(darkFontGrey)
                           .fontFamily(semibold)
                           .make(),
-                      Row(
-                        children: List.generate(
-                          data['p_colors'].length,
-                          (index) => Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              VxBox()
-                                  .size(40, 40)
-                                  .roundedFull
-                                  .color(Color(data['p_colors'][index])
-                                      .withOpacity(1.0))
-                                  .margin(
-                                      const EdgeInsets.symmetric(horizontal: 4))
-                                  .make()
-                                  .onTap(() {
+                      Obx(
+                        () => Row(
+                          children: List.generate(
+                            data['p_colors'].length,
+                            (index) => GestureDetector(
+                              onTap: () {
                                 controller.changeColorIndex(index);
-                              }),
-                              Visibility(
-                                visible: index == controller.colorIndex.value,
-                                child:
+                              },
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  VxBox()
+                                      .size(40, 40)
+                                      .roundedFull
+                                      .color(
+                                        Color(data['p_colors'][index])
+                                            .withOpacity(1.0),
+                                      )
+                                      .margin(const EdgeInsets.symmetric(
+                                          horizontal: 4))
+                                      .make(),
+                                  if (index == controller.colorIndex.value) ...[
                                     const Icon(Icons.done, color: Colors.white),
+                                  ],
+                                ],
                               ),
-                            ],
+                            ),
                           ),
                         ),
                       ).box.padding(const EdgeInsets.all(8)).make(),
